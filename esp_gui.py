@@ -8,15 +8,8 @@ import credentials as cred
 #TODO: Make this selectable on the GUI
 #TODO: Find a way to save this locally for use next time
 
-credentials = cred.Credentials()
-url = 'https://developer.sepush.co.za/business/2.0/area?id=jhbcitypower2-16-cresta'
-payload = {}
-headers = {'token':f'{credentials.GetESPApiKey()}'}
-
-esp_caller = esp.ESPCaller(url, payload, headers)
-schedules_res = esp_caller.GetNextSchedules()
-res_parser = esp.ResponseParser()
-parsed_schedules = res_parser.ParseResponse(schedules_res)
+esp_caller = esp.ESPCaller('jhbcitypower2-16-cresta')
+parsed_schedules= esp_caller.get_next_schedules()
 
 sg.theme('DarkAmber')   # Add a touch of color
 # All the stuff inside your window.
@@ -32,7 +25,6 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Close': # if user closes window or clicks close
         break
     if event == 'Refresh':
-        schedules_res = esp_caller.GetNextSchedules()
-        parsed_schedules = res_parser.ParseResponse(schedules_res)
+        parsed_schedules = esp_caller.get_next_schedules()
         schedules_text.update(value=f'{parsed_schedules}')
 window.close()
